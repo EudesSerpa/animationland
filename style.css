@@ -2,9 +2,13 @@
 
 /* General styles */
 :root {
-  --sky-color: #CCEFFF;
-  --wall-color: #554124;
-  --wall-shadow: #3C2515;
+  --sky-color: #1fddff;
+
+  --wall-color-front: #AF734F;
+  --wall-color-middle: #A06550;
+  --wall-color-back: #987655;
+  --wall-shadow: #542D1C;
+
   --grass-color: #01A755;
   --grass-shadow: #23904F;
 
@@ -20,17 +24,18 @@
 }
 
 body {
-  width: 100%;
-  min-height: 100vh;
   display: grid;
   place-items: center;
-  
+  width: 100%;
+  min-height: 100vh;
   font-family: 'Press Start 2P', cursive;
+  background: #007991;
+  background: -webkit-linear-gradient(to bottom, #78ffd6, #007991);
+  background: linear-gradient(to bottom, #78ffd6, #007991);
+  
+  counter-reset: score;
 }
 
-ul {
-  list-style: none;
-}
 
 /* App styles */
 .container {
@@ -41,6 +46,8 @@ ul {
   border: 5px solid #000;
   border-radius: 40px;
   background: var(--sky-color);
+  background: -webkit-linear-gradient(135deg, #f8b500 3%, #fceabb 10%, #1fddff 20%);
+  background: linear-gradient(135deg, #f8b500 3%, #fceabb 10%, #1fddff 20%);
   box-shadow: 
     inset 0 0 10px rgba(0, 0, 0, .1),
     0 20px 40px rgba(0, 0, 0, .3),
@@ -48,25 +55,51 @@ ul {
   overflow: hidden;
 }
 
+
 .header {
-  margin: 70px auto 0;
+  margin: 75px auto 0;
   color: var(--wall-shadow);
 }
 .header h1 {
-  font-size: 19px;
+  font-size: 18px;
 }
 .header h3 {
   margin-top: 20px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .score {
   display: inline-block;
   width: 30px;
   margin-left: 5px;
-  font-size: 12px;
   color: var(--grass-shadow);
 }
 
+/* Counters */
+input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 80px;
+  height: 50px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  opacity: 0;
+  z-index: 2;
+
+  animation: jump 1s ease-in-out infinite;
+}
+
+.score::after {
+  content: counter(score);
+}
+input:checked {
+  counter-increment: score;
+}
+
+
+/* Items */
 .layer,
 .wall,
 .lawn {
@@ -77,30 +110,49 @@ ul {
   position: absolute;
   width: 80px;
   height: 450px;
-  /* background: rgb(167, 226, 215); */
 }
 
 .wall {
   width: 220px;
   height: 400px;
   margin: 0 auto;
-  background: var(--wall-color);
+  background: var(--wall-color-front);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .lawn {
   width: 80px;
   height: 100px;
-  background: var(--grass-color);
+}
+.lawn div {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #FFF;
+}
+.top-lawn {
+  box-shadow: 1px 4px 6px var(--grass-shadow);
+}
+.right-lawn {
+  right: -30px;
+  bottom: -15px;
+  box-shadow: 1px 4px 6px var(--grass-shadow);
+}
+.left-lawn {
+  left: -30px;
+  bottom: -15px;
 }
 
 .zigzag {
   width: 100%;
-  height: 30px;
+  height: 60px;
   background:
     linear-gradient(135deg, var(--grass-color) 25%, transparent 25%),
     linear-gradient(225deg, var(--grass-color) 25%, transparent 25%),
-    linear-gradient(135deg, var(--grass-shadow) 20%, transparent 30%) 0 -60px,
-    linear-gradient(225deg, var(--grass-shadow) 20%, transparent 25%) 0 -60px;
+    linear-gradient(135deg, var(--wall-shadow) 25%, transparent 25%) 0 -63px,
+    linear-gradient(225deg, var(--wall-shadow) 25%, transparent 25%) 0 -63px;
   background-size: 30px 70px;
 }
 
@@ -109,27 +161,32 @@ ul {
 .one {
   right: 60px;
   z-index: 1;
+  animation: hide 1s ease-in-out infinite;
 }
 .two {
   left: 60px;
   z-index: 2;
+  animation: hide 1.1s ease-in-out infinite  .2s;
 }
 .three {
   right: 0;
   left: 0;
   z-index: 3;
+  background: var(--wall-color-back);
 }
 
 .four {
   left: 20px;
   height: 340px;
   z-index: 4;
+  animation: hide 1.1s ease-in-out infinite;
 }
 .five {
   left: -1px;
   width: 180px;
   height: 290px;
-  box-shadow: 1px 0 3px var(--wall-shadow);
+  box-shadow: 3px 5px 10px var(--wall-shadow);
+  background: var(--wall-color-middle);
   z-index: 5;
 }
 
@@ -137,12 +194,13 @@ ul {
   right: 30px;
   height: 210px;
   z-index: 6;
+  animation: hide .9s ease-in-out infinite .3s;
 }
 .seven {
   right: -1px;
   width: 160px;
   height: 160px;
-  box-shadow: -1px 0 3px var(--wall-shadow);
+  box-shadow: -3px 5px 10px var(--wall-shadow);
   z-index: 7;
 }
 
@@ -160,6 +218,17 @@ ul {
   margin: 0 auto;
   z-index: 10;
 }
+
+
+/* Lawns */
+.eight div,
+.nine div {
+  background: var(--grass-shadow);
+}
+.ten div {
+  background: var(--grass-color);
+}
+
 
 /* Bunny */
 .bunny {
@@ -222,6 +291,8 @@ ul {
   height: 4px;
   background: var(--bunny-eye);
   border-radius: 50%;
+
+  animation: blink 2s infinite;
 }
 
 .head__eye--left {
@@ -229,4 +300,45 @@ ul {
 }
 .head__eye--right {
   right: 28px;
+}
+
+
+
+/* Animations */
+@keyframes blink {
+  0% {
+    height: 4px;
+  }
+  5% {
+    height: 1px;
+    transform: translateY(2px);
+  }
+  10% {
+    transform: translateY(0);
+    height: 4px;
+  }
+}
+
+@keyframes hide {
+  0% {
+    bottom: 0;
+  }
+  25% {
+    bottom: -80px;
+  }
+  100% {
+    bottom: 0;
+  }
+}
+
+@keyframes jump {
+  0% {
+    top: 0;
+  }
+  25% {
+    top: 80px;
+  }
+  100% {
+    top: 0;
+  }
 }
