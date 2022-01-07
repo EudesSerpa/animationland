@@ -32,7 +32,7 @@ body {
   background: #007991;
   background: -webkit-linear-gradient(to bottom, #78ffd6, #007991);
   background: linear-gradient(to bottom, #78ffd6, #007991);
-  
+
   counter-reset: score;
 }
 
@@ -49,21 +49,18 @@ body {
   background: -webkit-linear-gradient(135deg, #f8b500 3%, #fceabb 10%, #1fddff 20%);
   background: linear-gradient(135deg, #f8b500 3%, #fceabb 10%, #1fddff 20%);
   box-shadow: 
-    inset 0 0 10px rgba(0, 0, 0, .1),
-    0 20px 40px rgba(0, 0, 0, .3),
-    0 15px 12px rgba(0, 0, 0, .2);
+  inset 0 0 10px rgba(0, 0, 0, .1),
+  10px 10px 40px rgba(0, 0, 0, .3),
+  15px 15px 12px rgba(0, 0, 0, .2);
   overflow: hidden;
 }
 
-
-.header {
+.title {
   margin: 75px auto 0;
+  font-size: 18px;
   color: var(--wall-shadow);
 }
-.header h1 {
-  font-size: 18px;
-}
-.header h3 {
+.desc {
   margin-top: 20px;
   font-size: 12px;
 }
@@ -91,11 +88,12 @@ input {
   animation: jump 1s ease-in-out infinite;
 }
 
-.score::after {
-  content: counter(score);
-}
 input:checked {
   counter-increment: score;
+}
+
+.score::after {
+  content: counter(score);
 }
 
 
@@ -161,7 +159,7 @@ input:checked {
 .one {
   right: 60px;
   z-index: 1;
-  animation: hide 1s ease-in-out infinite;
+  animation: hide 1s ease-in-out infinite .1s;
 }
 .two {
   left: 60px;
@@ -336,7 +334,7 @@ input:checked {
     top: 0;
   }
   25% {
-    top: 80px;
+    top: -5px;
   }
   100% {
     top: 0;
